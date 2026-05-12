@@ -1,0 +1,91 @@
+---
+description: 硬件规格、操作系统、已装工具（机器档案）
+globs: 
+---
+# Machine Profile — 软硬件基础档案
+
+> 自动采集于 2026-05-12。帮助 AI Agent 了解工作环境的硬边界。
+
+## 操作系统与 Shell
+
+| 属性 | 值 |
+|------|-----|
+| OS | Microsoft Windows 11 专业版 |
+| 架构 | x64 |
+| Shell | PowerShell (NOT bash, NOT CMD) |
+| PS 语法禁忌 | ❌ `&&` 链式、`export`、`uname` — 这些在 PowerShell 中不存在 |
+
+## 硬件
+
+| 组件 | 规格 |
+|------|------|
+| CPU | x64 (未具体采集) |
+| RAM | 15.8 GB |
+| GPU | NVIDIA GeForce RTX 4060 (8 GB VRAM) |
+| CUDA Runtime | 13.1 (nvidia-smi 确认) |
+| CUDA Toolkit (nvcc) | ❌ 不在 PATH 中（需 conda install cuda-toolkit 才能在环境内使用） |
+| Driver | 591.74 |
+
+### GPU 策略
+
+- RTX 4060 是 consumer GPU（非专业卡），VRAM 8GB
+- 可加载模型上限：约 6-7B 参数的量化模型 (4-bit)
+- 同时运行其他应用（浏览器、微信等）时可用 VRAM 约 5-6GB
+- 推荐：
+  - `faiss-gpu` 可用（安装时需指定 CUDA 12.x 兼容版本）
+  - torch 应安装 CUDA 版本：`conda install pytorch pytorch-cuda=12.4 -c pytorch -c nvidia`（CUDA 13.1 向后兼容 12.x）
+  - 不要尝试加载 70B 甚至 13B 的全精度模型到 GPU — 8GB 不够
+
+## 磁盘
+
+| 盘符 | 总大小 | 已用 | 空闲 |
+|------|--------|------|------|
+| C: | ≈199 GB | 165.5 GB | 33.7 GB |
+| D: | ≈731 GB | 608.9 GB | 122.3 GB |
+
+> **注意**：C 盘仅剩 33.7 GB，不适合存储大型数据集或模型。项目代码放在 D 盘，数据资产也应写入 `data/`（在 D 盘项目目录内）。
+
+## 已装工具
+
+| 工具 | 路径 | 备注 |
+|------|------|------|
+| git | `C:\Program Files\Git\cmd\git.exe` | ✅ |
+| python | `C:\Users\WINDOWS\.conda\envs\clinical_reasoning\python.exe` | 用 conda 环境的版本 |
+| node | `D:\Node.js\node.exe` | ✅ |
+| sqlite3 | `D:\Anaconda\Library\bin\sqlite3.exe` | ✅ |
+| code (VS Code CLI) | `D:\VS code\Microsoft VS Code\Code.exe` | ✅ |
+| dotnet | `C:\Program Files\dotnet\dotnet.exe` | ✅ |
+| conda | `D:\Anaconda\condabin\conda.bat` | Anaconda 完整安装 |
+| nvidia-smi | `C:\Windows\System32\nvidia-smi.exe` | ✅ |
+
+## Conda 环境列表
+
+| 环境名 | 路径 | 备注 |
+|--------|------|------|
+| base | `D:\Anaconda` | 不要在此环境工作 |
+| clinical_reasoning | `C:\Users\WINDOWS\.conda\envs\clinical_reasoning` | 🎯 **当前活动环境** |
+| clinical_agent | `C:\Users\WINDOWS\.conda\envs\clinical_agent` | 旧项目遗留 |
+| fnirs_env | `D:\fNIRS_mirror_therapy\envs\fnirs_env` | 另一项目 |
+| kg_env | `d:\kg_system\kg_env` | 旧项目 kg_system 的环境 |
+
+## 网络
+
+- ✅ 可直接访问外网
+- ✅ 可访问 PyPI / HuggingFace / GitHub
+- 无 HTTP 代理配置
+
+## 对 AI Agent 的约束总结
+
+```
+✅ CAN DO:
+- 使用 GPU (CUDA) 加速 — 用 pytorch + faiss-gpu
+- 加载量化小模型 (Q4, <=7B) 到 GPU
+- 运行 Jupyter Notebook（在 notebooks/ 目录）
+- 安装需要 CUDA 的包
+
+❌ CANNOT DO:
+- 使用 bash 命令或 expect bash-style shell
+- 加载 >8GB 显存的模型
+- 使用系统默认 python（必须用 conda 环境的 python）
+- 往 C 盘写大文件（模型/数据集）
+- 用 docker（未装 WSL / Docker Desktop）

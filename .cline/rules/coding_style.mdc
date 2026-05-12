@@ -1,0 +1,14 @@
+# Coding Style Rules
+
+1. **Docstrings**: All public modules, classes, and functions must have Google-style docstrings.
+2. **Type annotations**: All function parameters and return types must be annotated. Use `Optional[T]` for nullable values.
+3. **Imports order**: standard library → third-party → local modules (separated by blank lines).
+4. **Line length**: Aim for ≤ 100 characters per line.
+5. **Naming conventions**:
+   - Classes: `PascalCase`
+   - Functions & methods: `snake_case`
+   - Constants: `UPPER_SNAKE_CASE`
+   - Private methods/attributes: prefix with `_`
+6. **No `from module import *`**: Be explicit with imports.
+7. **Error handling**: Use specific exception types. Don't swallow exceptions silently.
+8. **File encoding**: UTF-8 with BOM disabled.

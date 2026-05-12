@@ -1,0 +1,171 @@
+---
+description: 项目标识、环境策略、架构规则、编码规范、安全工作流
+globs: 
+---
+# Project Context — clinical_reasoning_agent
+
+---
+
+## Agent 启动检查清单
+
+当接手此项目时，按以下顺序执行前置操作：
+
+```powershell
+# 1. 读机器档案 — 了解硬件/OS/GPU 约束
+#    文件：.cline/rules/machine_profile.mdc
+
+# 2. 激活环境
+conda activate clinical_reasoning
+
+# 3. 验证环境无 user-site 泄漏
+python -c "import sys; assert 'Roaming' not in str(sys.path), 'user-site leakage detected!'"
+
+# 4. 验证核心依赖已安装（首次安装用）
+python -c "import openai; import yaml; import faiss; print('All core deps OK')"
+
+# 5. 运行测试确认基线通过
+python -m pytest tests/ -v
+
+# 6. 开始实现模块（按依赖顺序，详见下方模块依赖规则）
+```
+
+**注意**：首次从 git clone 后，需要手动执行 `conda env create -f environment.yml` 创建环境。之后每次只需 `conda activate clinical_reasoning`。
+
+---
+
+## 项目标识
+
+- **项目名**：clinical_reasoning_agent
+- **根目录**：`d:\cline_control\clinical_reasoning_agent`
+- **Python 版本**：3.13（conda env: `clinical_reasoning`）
+- **包管理**：双锁文件 — `deploy/requirements.txt` (pip lock) + `environment.yml` (conda lock)
+
+---
+
+## 环境策略
+
+### 关键 Windows 规则（必须遵守）
+
+- `PYTHONNOUSERSITE=1` 已在 `clinical_reasoning` 环境设为 conda env config var
+- **每次必须先用** `conda activate clinical_reasoning` 激活环境，此环境变量才会生效
+- **禁止** 直接使用裸 `pip install`。正确命令：
+
+```powershell
+$env:PYTHONNOUSERSITE=1; python -m pip install <package>
+```
+
+- **禁止** 使用 `pip install --user`
+- 安装包后应验证安装位置：
+
+```powershell
+python -c "import <pkg>; print(<pkg>.__file__)"
+```
+
+期望前缀：`C:\Users\WINDOWS\.conda\envs\clinical_reasoning\Lib\site-packages\`
+如果看到 `AppData\Roaming\Python\...`，说明包装错了位置。
+
+### 常用命令
+
+```powershell
+# 激活环境
+conda activate clinical_reasoning
+
+# 运行测试
+python -m pytest tests/ -v
+
+# 安装/更新依赖
+$env:PYTHONNOUSERSITE=1; python -m pip install -r deploy/requirements.txt
+
+# 更新锁文件（添加新依赖后）
+conda env export -n clinical_reasoning --no-builds > environment.yml
+python -m pip freeze > deploy/requirements.txt
+
+# 验证无 user-site 泄漏
+python -c "import sys; print('Roaming' in str(sys.path))"
+```
+
+### 从零复现环境
+
+```powershell
+conda env create -f environment.yml
+conda activate clinical_reasoning
+```
+
+---
+
+## 模块依赖规则（严格单向）
+
+```
+infrastructure  ←  knowledge_graph  ←  retrieval  ←  generation  ←  orchestrator
+                        ↑                ↑
+                    extraction       reasoning
+```
+
+| 层 | 可依赖 | 禁止依赖 |
+|----|--------|---------|
+| `infrastructure/` | 无 | 任何其他 src/ 模块 |
+| `knowledge_graph/` | infrastructure | extraction, reasoning, retrieval, generation |
+| `extraction/` | infrastructure, knowledge_graph | reasoning, retrieval, generation |
+| `reasoning/` | infrastructure, knowledge_graph, extraction, retrieval | generation, orchestrator |
+| `retrieval/` | infrastructure, knowledge_graph | generation |
+| `generation/` | infrastructure, retrieval, reasoning | 直接操作数据库 |
+| `orchestrator.py` | 全部 | 无 |
+
+### 各层职责
+
+- `infrastructure/`：可复用的底层工具（database, embedder, vector store, LLM client, config）。**无业务逻辑。**
+- `knowledge_graph/`：图谱 schema、models、CRUD、路径查询
+- `extraction/`：实体抽取（规则/词典）
+- `reasoning/`（v0.3 MVP）：M-rule 规则匹配引擎、可解释推理路径构建、置信度聚合
+- `retrieval/`：图谱路径检索 + 向量文献检索
+- `generation/`：提示词模板 + LLM 报告生成（消费 reasoning 输出的推理路径）
+- `orchestrator.py`：主流程编排
+
+---
+
+## 编码规范
+
+1. **Docstrings**：所有公开模块、类、函数使用 Google 风格 docstring
+2. **类型注解**：所有函数参数和返回值必须有类型注解；`Optional[T]` 表示可空
+3. **导入顺序**：标准库 → 第三方库 → 本地模块（空行分隔）
+4. **行长度**：≤ 100 字符
+5. **命名约定**：
+   - 类：`PascalCase`
+   - 函数/方法：`snake_case`
+   - 常量：`UPPER_SNAKE_CASE`
+   - 私有方法/属性：前缀 `_`
+6. **禁止** `from module import *`
+7. **错误处理**：使用具体异常类型，不静默吞异常
+8. **文件编码**：UTF-8（不含 BOM）
+
+---
+
+## 数据安全规则
+
+1. **不要提交密钥**：API key、密码、token 放 `.env`，永远不进代码或 `config.yaml`
+2. **先 gitignore 再创建敏感文件**：确保文件名已在 `.gitignore` 中
+3. **SQLite 安全**：始终使用参数化查询，禁止字符串拼接 WHERE 子句
+4. **生产数据不进开发环境**：使用合成/样本数据
+5. **文件路径**：用 `pathlib.Path` 或 `os.path.join` 构建路径，不用字符串拼接
+6. **清理临时文件**：临时产物应被 gitignore 或在完成后显式删除
+7. **term_mapping 表**：存储原文/中文术语对，中文术语仅供显示，不是可执行代码
+
+---
+
+## 关键路径
+
+| 用途 | 路径 |
+|------|------|
+| 测试 | `tests/` |
+| 配置模板 | `config.yaml`, `.env.example` |
+| 图谱 schema | `src/knowledge_graph/schema.sql` |
+| SQLite 数据库 | `data/knowledge_base.db`（自动创建） |
+| FAISS 索引 | `data/faiss_index/`（自动创建） |
+
+---
+
+## 架构流程
+
+```
+用户输入 → 实体抽取 → 图谱检索 → 向量检索 → LLM 生成 → SOAP 报告
+                                          ↘ 图谱路径 ↗

@@ -1,0 +1,10 @@
+# Core Workflow Rules
+
+1. **Plan first**: Before writing any code, read the existing files and plan the approach.
+2. **One step at a time**: Complete one module before moving to the next.
+3. **Test each step**: After each module change, run the relevant tests before proceeding.
+4. **Minimal viable verification**: Each completed module must provide a minimal runnable demo and a verification method.
+5. **Preserve the type system**: All public functions must have type annotations.
+6. **No globals**: Use Config dataclass for configuration, not global variables.
+7. **Log, don't print**: Use the `logging` module with appropriate log levels.
+8. **Keep imports clean**: Follow the strict one-way module dependency rules. No circular imports.

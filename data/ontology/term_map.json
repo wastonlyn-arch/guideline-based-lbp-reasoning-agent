@@ -1,0 +1,681 @@
+{
+  "Repeated_Lumbar_Flexion": {
+    "zh": "反复腰椎屈曲",
+    "layer": "L0",
+    "type": "action",
+    "subtype": "None",
+    "description": "反复腰椎屈曲动作，是椎间盘突出的主要诱因之一。"
+  },
+  "Prolonged_Sitting": {
+    "zh": "久坐",
+    "layer": "L0",
+    "type": "exposure",
+    "subtype": "None",
+    "description": "长时间坐着，尤其是在腰椎屈曲的姿势下，与椎间盘突出风险增加相关。"
+  },
+  "Sit_Up": {
+    "zh": "仰卧起坐",
+    "layer": "L0",
+    "type": "action",
+    "subtype": "None",
+    "description": "仰卧起坐运动，包括屈膝或直腿的变体。"
+  },
+  "Stoop_Lifting": {
+    "zh": "弯腰抬举",
+    "layer": "L0",
+    "type": "action",
+    "subtype": "None",
+    "description": "弯腰（脊柱屈曲）抬举重物，而非屈髋屈膝。"
+  },
+  "Morning_Flexion": {
+    "zh": "早晨屈曲",
+    "layer": "L0",
+    "type": "action",
+    "subtype": "None",
+    "description": "早晨起床后不久进行脊柱屈曲动作。"
+  },
+  "Flexion_Compression": {
+    "zh": "屈曲压缩负荷",
+    "layer": "L1",
+    "type": "load",
+    "subtype": "flexion_compression",
+    "description": "脊柱在屈曲状态下承受压缩负荷，是导致后侧椎间盘突出的典型力学机制。"
+  },
+  "Disc_Shear": {
+    "zh": "椎间盘剪切力",
+    "layer": "L1",
+    "type": "load",
+    "subtype": "shear",
+    "description": "作用于椎间关节的剪切力，脊柱在完全屈曲时剪切力显著增加。"
+  },
+  "Repetitive_Low_Load": {
+    "zh": "重复低负荷",
+    "layer": "L1",
+    "type": "load",
+    "subtype": "repetitive_low_load",
+    "description": "反复施加的低水平压缩负荷，仅需约800-1000N，配合反复屈曲即可导致椎间盘突出。"
+  },
+  "Sitting_Disc_Load": {
+    "zh": "坐姿下椎间盘内压力增高，并对椎间盘后部纤维环产生持续的应力",
+    "layer": "L1",
+    "type": "load",
+    "subtype": "sustained_posture",
+    "description": "坐姿下椎间盘内压力增高，并对椎间盘后部纤维环产生持续的应力。"
+  },
+  "Disc_Herniation": {
+    "zh": "椎间盘突出",
+    "layer": "L2",
+    "type": "pathology",
+    "subtype": "None",
+    "description": "椎间盘髓核突破纤维环，常为后外侧型，由反复屈曲和压缩负荷引起。"
+  },
+  "Endplate_Fracture": {
+    "zh": "终板骨折",
+    "layer": "L2",
+    "type": "pathology",
+    "subtype": "None",
+    "description": "椎体终板骨折，常由轴向压缩负荷导致，可引发Schmorl结节。"
+  },
+  "Annulus_Delamination": {
+    "zh": "纤维环分层",
+    "layer": "L2",
+    "type": "pathology",
+    "subtype": "None",
+    "description": "纤维环分层，胶原纤维层之间分离，是椎间盘突出的早期阶段。"
+  },
+  "Spondylolisthesis": {
+    "zh": "脊椎滑脱",
+    "layer": "L2",
+    "type": "pathology",
+    "subtype": "None",
+    "description": "脊椎滑脱，通常由椎弓峡部骨折引起，与剪切力负荷有关。"
+  },
+  "Nerve_Root_Compression": {
+    "zh": "神经根压迫",
+    "layer": "L3",
+    "type": "mechanism",
+    "subtype": "None",
+    "description": "突出的椎间盘或狭窄的椎间孔直接压迫神经根。"
+  },
+  "Instability": {
+    "zh": "节段性不稳定",
+    "layer": "L3",
+    "type": "mechanism",
+    "subtype": "None",
+    "description": "由于组织损伤（如韧带松弛、椎间盘高度丢失）导致的节段性不稳定，引发异常微动和疼痛。"
+  },
+  "Discogenic_Pain": {
+    "zh": "椎间盘源性疼痛",
+    "layer": "L6",
+    "type": "diagnosis",
+    "subtype": "None",
+    "description": "源于椎间盘内部结构紊乱或损伤的疼痛，通常在脊柱屈曲时加重。"
+  },
+  "Radicular_Pain": {
+    "zh": "放射性腿痛",
+    "layer": "L4",
+    "type": "symptom",
+    "subtype": "None",
+    "description": "由于神经根受刺激或压迫引起的放射性疼痛，常沿坐骨神经通路放散。"
+  },
+  "Flexion_Intolerance": {
+    "zh": "屈曲不耐受",
+    "layer": "L5",
+    "type": "sign",
+    "subtype": "None",
+    "description": "患者在脊柱进行屈曲动作或体位时诱发的疼痛。"
+  },
+  "SLR_Positive": {
+    "zh": "直腿抬高试验阳性",
+    "layer": "L5",
+    "type": "sign",
+    "subtype": "None",
+    "description": "直腿抬高试验阳性，提示坐骨神经或神经根受到牵拉或压迫。"
+  },
+  "Sitting_Intolerance": {
+    "zh": "久坐不耐受",
+    "layer": "L5",
+    "type": "symptom",
+    "subtype": "None",
+    "description": "无法耐受长时间坐姿，坐位会加剧疼痛，常见于椎间盘源性疼痛。"
+  },
+  "Avoid_Spine_Flexion": {
+    "zh": "避免脊柱屈曲",
+    "layer": "L7",
+    "type": "intervention",
+    "subtype": "remove_cause",
+    "description": "避免脊柱屈曲动作和姿势，以消除疼痛和损伤的诱因。"
+  },
+  "Core_Stabilization_Exercise": {
+    "zh": "核心稳定训练",
+    "layer": "L7",
+    "type": "intervention",
+    "subtype": "exercise_therapy",
+    "description": "核心稳定训练，旨在增强躯干肌肉的耐力，以稳定脊柱，减少微动和疼痛。"
+  },
+  "Hip_Hinge_Lifting": {
+    "zh": "髋铰链抬举",
+    "layer": "L0",
+    "type": "action",
+    "subtype": "None",
+    "description": "髋部铰链式抬举，在抬举时保持腰椎中立位，通过髋关节屈曲来完成动作。"
+  },
+  "Cat_Camel_Exercise": {
+    "zh": "猫驼式运动",
+    "layer": "L7",
+    "type": "intervention",
+    "subtype": "exercise_therapy",
+    "description": "猫驼式运动，在四点跪位下进行的脊柱屈伸活动，作为无负荷的脊柱活动度练习。"
+  },
+  "Pain_Relief": {
+    "zh": "疼痛缓解",
+    "layer": "L8",
+    "type": "outcome",
+    "subtype": "None",
+    "description": "疼痛减轻，是康复治疗的主要目标之一。"
+  },
+  "Lumbar_Flexion": {
+    "zh": "腰椎屈曲",
+    "layer": "L0",
+    "type": "action",
+    "subtype": "None",
+    "description": "腰椎屈曲动作，特别是指脊柱的完全屈曲，是椎间盘损伤的主要机制。"
+  },
+  "Sustained_Posture": {
+    "zh": "持续姿势负荷",
+    "layer": "L1",
+    "type": "load",
+    "subtype": "sustained_posture",
+    "description": "长时间保持屈曲姿势，如坐姿，导致被动组织蠕变，降低其失效耐受力。"
+  },
+  "Spine_Compression": {
+    "zh": "脊柱压缩",
+    "layer": "L1",
+    "type": "load",
+    "subtype": "None",
+    "description": "脊柱承受的轴向压缩力，在椎间盘屈曲时显著增加纤维环后部的应力。"
+  },
+  "Disc_Bulge": {
+    "zh": "椎间盘膨出",
+    "layer": "L2",
+    "type": "pathology",
+    "subtype": "None",
+    "description": "椎间盘纤维环向外膨出，但未完全破裂，是椎间盘突出的前期或较轻形式。"
+  },
+  "Inflammation": {
+    "zh": "炎症",
+    "layer": "L3",
+    "type": "mechanism",
+    "subtype": "None",
+    "description": "髓核突破纤维环后，作为异物被免疫系统识别，引发局部炎症反应。"
+  },
+  "Central_Sensitization": {
+    "zh": "中枢致敏",
+    "layer": "L3",
+    "type": "mechanism",
+    "subtype": "None",
+    "description": "持续的疼痛信号导致中枢神经系统对痛觉信号放大和敏化。"
+  },
+  "Low_Back_Pain": {
+    "zh": "腰痛",
+    "layer": "L4",
+    "type": "symptom",
+    "subtype": "None",
+    "description": "局限于腰背部的疼痛，可能与椎间盘、关节突关节或肌肉韧带损伤有关。"
+  },
+  "Morning_Stiffness": {
+    "zh": "晨僵",
+    "layer": "L4",
+    "type": "symptom",
+    "subtype": "None",
+    "description": "晨起时疼痛和僵硬感加重，与夜间仰卧时椎间盘吸水膨胀有关。"
+  },
+  "Prone_Extension_Relief": {
+    "zh": "俯卧后伸缓解",
+    "layer": "L5",
+    "type": "test",
+    "subtype": "None",
+    "description": "俯卧位脊柱后伸时患者报告疼痛减轻，是椎间盘源性疼痛的强体征。"
+  },
+  "Neutral_Spine_Posture": {
+    "zh": "中立位姿势",
+    "layer": "L7",
+    "type": "intervention",
+    "subtype": "remove_cause",
+    "description": "教导患者在日常生活中保持腰椎中立位，通过屈髋代替屈腰。"
+  },
+  "Big_Three_Exercises": {
+    "zh": "McGill三大训练",
+    "layer": "L7",
+    "type": "intervention",
+    "subtype": "exercise_therapy",
+    "description": "McGill推荐的三项核心训练：改良卷腹、侧桥和鸟狗式。"
+  },
+  "Prone_Extension_Exercise": {
+    "zh": "俯卧后伸练习",
+    "layer": "L7",
+    "type": "intervention",
+    "subtype": "exercise_therapy",
+    "description": "俯卧位静力性伸展，用于减轻急性椎间盘后部突出的压力。"
+  },
+  "Functional_Recovery": {
+    "zh": "功能恢复",
+    "layer": "L8",
+    "type": "outcome",
+    "subtype": "None",
+    "description": "恢复无痛的日常活动、工作和运动能力。"
+  },
+  "Abdominal_Bracing": {
+    "zh": "腹部支撑",
+    "layer": "L7",
+    "type": "intervention",
+    "subtype": "exercise_therapy",
+    "description": "腹部支撑，对称性地激活所有腹部肌层以形成核心刚度。"
+  },
+  "Abdominal_Hollowing": {
+    "zh": "腹部内收",
+    "layer": "L7",
+    "type": "intervention",
+    "subtype": "exercise_therapy",
+    "description": "腹部内收动作，被McGill证明降低脊柱稳定性。"
+  },
+  "Spinal_Hinge": {
+    "zh": "脊柱铰链",
+    "layer": "L2",
+    "type": "pathology",
+    "subtype": "None",
+    "description": "脊柱铰链现象，某一节段承担不成比例的大幅运动。"
+  },
+  "Quadratus_Lumborum": {
+    "zh": "腰方肌",
+    "layer": "L0",
+    "type": "anatomy_variation",
+    "subtype": "None",
+    "description": "腰方肌，主要脊柱稳定肌。"
+  },
+  "Multifidus": {
+    "zh": "多裂肌",
+    "layer": "L0",
+    "type": "anatomy_variation",
+    "subtype": "None",
+    "description": "多裂肌，脊柱后方稳定器。"
+  },
+  "Gluteal_Amnesia": {
+    "zh": "臀肌失忆",
+    "layer": "L3",
+    "type": "mechanism",
+    "subtype": "None",
+    "description": "臀肌失忆症，髋伸展时臀肌无法被充分激活。"
+  },
+  "Flexion_Stretching": {
+    "zh": "屈曲拉伸",
+    "layer": "L7",
+    "type": "intervention",
+    "subtype": "exercise_therapy",
+    "description": "屈曲拉伸（如抱膝触胸），常被错误推荐但会加剧损伤。"
+  },
+  "Endurance_Training": {
+    "zh": "耐力训练",
+    "layer": "L7",
+    "type": "intervention",
+    "subtype": "exercise_therapy",
+    "description": "耐力训练对减少未来背痛发作风险更具保护作用。"
+  },
+  "Golfers_Lift": {
+    "zh": "高尔夫拾物法",
+    "layer": "L7",
+    "type": "intervention",
+    "subtype": "remove_cause",
+    "description": "高尔夫式提举法，安全拾取地面轻物。"
+  },
+  "Flexion_Relaxation_Phenomenon": {
+    "zh": "屈曲放松现象",
+    "layer": "L5",
+    "type": "test",
+    "subtype": "None",
+    "description": "完全屈曲时背部伸肌肌电活动突然静默。"
+  },
+  "Lumbopelvic_Rhythm": {
+    "zh": "腰盆节律",
+    "layer": "L6",
+    "type": "diagnosis",
+    "subtype": "None",
+    "description": "腰盆节律，McGill认为这是一个临床误区。"
+  },
+  "Avoid_Early_Morning_Flexion": {
+    "zh": "避免晨起后立即进行脊柱屈曲，损伤风险最高",
+    "layer": "L7",
+    "type": "intervention",
+    "subtype": "remove_cause",
+    "description": "避免晨起后立即进行脊柱屈曲，损伤风险最高。"
+  },
+  "Lumbar_Flexion_Mobility_Exercise": {
+    "zh": "旨在增加腰椎屈曲活动度的练习",
+    "layer": "L0",
+    "type": "action",
+    "subtype": "None",
+    "description": "旨在增加腰椎屈曲活动度的练习。"
+  },
+  "Loaded_Spine_Motion": {
+    "zh": "在脊柱承受外部负荷时进行屈伸运动",
+    "layer": "L1",
+    "type": "load",
+    "subtype": "flexion_compression",
+    "description": "在脊柱承受外部负荷时进行屈伸运动。"
+  },
+  "High_Spine_Power": {
+    "zh": "高速脊柱弯曲运动伴随肌肉力量会增加损伤风险",
+    "layer": "L1",
+    "type": "load",
+    "subtype": "repetitive_low_load",
+    "description": "高速脊柱弯曲运动伴随肌肉力量会增加损伤风险。"
+  },
+  "Increased_IAP": {
+    "zh": "腹内压增高，可增加躯干刚度",
+    "layer": "L1",
+    "type": "load",
+    "subtype": "None",
+    "description": "腹内压增高，可增加躯干刚度。"
+  },
+  "Posterior_Disc_Herniation": {
+    "zh": "髓核向后突破纤维环",
+    "layer": "L2",
+    "type": "pathology",
+    "subtype": "None",
+    "description": "髓核向后突破纤维环。"
+  },
+  "Facet_Joint_Arthritis": {
+    "zh": "小关节关节炎",
+    "layer": "L2",
+    "type": "pathology",
+    "subtype": "None",
+    "description": "小关节关节炎。"
+  },
+  "Spinal_Stenosis": {
+    "zh": "椎管狭窄",
+    "layer": "L2",
+    "type": "pathology",
+    "subtype": "None",
+    "description": "椎管狭窄。"
+  },
+  "Segmental_Instability": {
+    "zh": "节段性稳定性丧失",
+    "layer": "L3",
+    "type": "mechanism",
+    "subtype": "None",
+    "description": "节段性稳定性丧失。"
+  },
+  "Radicular_Pain_Sciatica": {
+    "zh": "神经根受压引起的放射性腿部疼痛",
+    "layer": "L4",
+    "type": "symptom",
+    "subtype": "None",
+    "description": "神经根受压引起的放射性腿部疼痛。"
+  },
+  "Mechanical_Back_Pain": {
+    "zh": "与活动相关的背部疼痛",
+    "layer": "L4",
+    "type": "symptom",
+    "subtype": "None",
+    "description": "与活动相关的背部疼痛。"
+  },
+  "Aberrant_Motion_Catch": {
+    "zh": "异常顿挫运动",
+    "layer": "L5",
+    "type": "sign",
+    "subtype": "None",
+    "description": "脊柱出现异常顿挫运动，提示节段不稳定。"
+  },
+  "Discogenic_Disorder_Diagnosis": {
+    "zh": "椎间盘源性疼痛诊断",
+    "layer": "L6",
+    "type": "diagnosis",
+    "subtype": "None",
+    "description": "椎间盘源性疼痛诊断。"
+  },
+  "Spine_Mobilizing_Exercises": {
+    "zh": "脊柱活动度训练",
+    "layer": "L7",
+    "type": "intervention",
+    "subtype": "exercise_therapy",
+    "description": "如猫驼式，无压缩负荷下的活动度训练。"
+  },
+  "Directed_Stretching_Exercises": {
+    "zh": "定向牵伸",
+    "layer": "L7",
+    "type": "intervention",
+    "subtype": "exercise_therapy",
+    "description": "特定方向牵伸。"
+  },
+  "Nerve_Flossing": {
+    "zh": "神经滑动练习",
+    "layer": "L7",
+    "type": "intervention",
+    "subtype": "exercise_therapy",
+    "description": "神经滑动练习。"
+  },
+  "Surgery": {
+    "zh": "手术",
+    "layer": "L7",
+    "type": "intervention",
+    "subtype": "surgery",
+    "description": "手术治疗。"
+  },
+  "Sustained_Posture_Load": {
+    "zh": "持续姿势导致营养交换受限与组织退变",
+    "layer": "L1",
+    "type": "load",
+    "subtype": "sustained_posture",
+    "description": "持续姿势导致营养交换受限与组织退变"
+  },
+  "Annulus_Tear": {
+    "zh": "纤维环撕裂",
+    "layer": "L2",
+    "type": "pathology",
+    "subtype": "None",
+    "description": "纤维环撕裂，常由反复屈曲压缩引起"
+  },
+  "Disc_Degeneration": {
+    "zh": "椎间盘退变",
+    "layer": "L2",
+    "type": "pathology",
+    "subtype": "None",
+    "description": "椎间盘退变，与长期低负荷重复应力相关"
+  },
+  "MRI_Disc_Bulge": {
+    "zh": "MRI椎间盘膨出",
+    "layer": "L5",
+    "type": "test",
+    "subtype": "None",
+    "description": "MRI显示椎间盘膨出，但与症状相关性弱"
+  },
+  "Avoid_Flexion": {
+    "zh": "避免腰椎屈曲动作",
+    "layer": "L7",
+    "type": "intervention",
+    "subtype": "remove_cause",
+    "description": "避免腰椎屈曲动作"
+  },
+  "Backward_Bending": {
+    "zh": "后伸动作",
+    "layer": "L0",
+    "type": "action",
+    "subtype": "None",
+    "description": "脊柱后伸/后弯动作"
+  },
+  "Walking_Extension": {
+    "zh": "行走后伸",
+    "layer": "L0",
+    "type": "exposure",
+    "subtype": "None",
+    "description": "行走时腰椎进入后伸位"
+  },
+  "Standing_Extended": {
+    "zh": "站立后伸",
+    "layer": "L0",
+    "type": "exposure",
+    "subtype": "None",
+    "description": "长时间站立后伸姿势"
+  },
+  "Extension_Compression": {
+    "zh": "后伸压缩负荷",
+    "layer": "L1",
+    "type": "load",
+    "subtype": "extension_compression",
+    "description": "后伸+压缩负荷，集中于小关节"
+  },
+  "Facet_Impingement": {
+    "zh": "小关节撞击",
+    "layer": "L2",
+    "type": "pathology",
+    "subtype": "None",
+    "description": "小关节撞击/卡压"
+  },
+  "Facet_Irritation": {
+    "zh": "小关节激惹",
+    "layer": "L2",
+    "type": "pathology",
+    "subtype": "None",
+    "description": "小关节激惹/炎症"
+  },
+  "Facet_Joint_Syndrome": {
+    "zh": "小关节综合征",
+    "layer": "L6",
+    "type": "diagnosis",
+    "subtype": "None",
+    "description": "小关节综合征诊断"
+  },
+  "Extension_Pain": {
+    "zh": "后伸痛",
+    "layer": "L5",
+    "type": "sign",
+    "subtype": "None",
+    "description": "后伸时诱发疼痛"
+  },
+  "Facet_Tenderness": {
+    "zh": "小关节压痛",
+    "layer": "L5",
+    "type": "sign",
+    "subtype": "None",
+    "description": "小关节区域压痛"
+  },
+  "Walking_Intolerance": {
+    "zh": "行走不耐受",
+    "layer": "L4",
+    "type": "symptom",
+    "subtype": "None",
+    "description": "行走不能耐受，后伸加重"
+  },
+  "Extension_Mobility_Exercise": {
+    "zh": "后伸活动度训练",
+    "layer": "L7",
+    "type": "intervention",
+    "subtype": "exercise_therapy",
+    "description": "后伸活动度训练"
+  },
+  "Avoid_Extension": {
+    "zh": "避免后伸",
+    "layer": "L7",
+    "type": "intervention",
+    "subtype": "remove_cause",
+    "description": "避免重复后伸动作"
+  },
+  "NSAIDs": {
+    "zh": "非甾体抗炎药",
+    "layer": "L7",
+    "type": "intervention",
+    "subtype": "medication",
+    "description": "非甾体抗炎药"
+  },
+  "Muscle_Relaxants": {
+    "zh": "肌肉松弛剂",
+    "layer": "L7",
+    "type": "intervention",
+    "subtype": "medication",
+    "description": "肌肉松弛剂"
+  },
+  "Acetaminophen": {
+    "zh": "对乙酰氨基酚",
+    "layer": "L7",
+    "type": "intervention",
+    "subtype": "medication",
+    "description": "对乙酰氨基酚"
+  },
+  "Gabapentinoid": {
+    "zh": "加巴喷丁类药物",
+    "layer": "L7",
+    "type": "intervention",
+    "subtype": "medication",
+    "description": "加巴喷丁类药物"
+  },
+  "Epidural_Steroid_Injection": {
+    "zh": "硬膜外类固醇注射",
+    "layer": "L7",
+    "type": "intervention",
+    "subtype": "medication",
+    "description": "硬膜外类固醇注射"
+  },
+  "Manual_Therapy": {
+    "zh": "手法治疗",
+    "layer": "L7",
+    "type": "intervention",
+    "subtype": "passive_therapy",
+    "description": "手法治疗"
+  },
+  "Traction": {
+    "zh": "腰椎牵引",
+    "layer": "L7",
+    "type": "intervention",
+    "subtype": "passive_therapy",
+    "description": "腰椎牵引"
+  },
+  "Heat_Therapy": {
+    "zh": "热敷",
+    "layer": "L7",
+    "type": "intervention",
+    "subtype": "passive_therapy",
+    "description": "热敷治疗"
+  },
+  "Ice_Therapy": {
+    "zh": "冷敷",
+    "layer": "L7",
+    "type": "intervention",
+    "subtype": "passive_therapy",
+    "description": "冷敷治疗"
+  },
+  "TENS": {
+    "zh": "经皮神经电刺激",
+    "layer": "L7",
+    "type": "intervention",
+    "subtype": "passive_therapy",
+    "description": "经皮神经电刺激"
+  },
+  "Acupuncture": {
+    "zh": "针灸",
+    "layer": "L7",
+    "type": "intervention",
+    "subtype": "passive_therapy",
+    "description": "针灸"
+  },
+  "Microdiscectomy": {
+    "zh": "显微椎间盘切除术",
+    "layer": "L7",
+    "type": "intervention",
+    "subtype": "surgery",
+    "description": "显微椎间盘切除术"
+  },
+  "Spinal_Fusion": {
+    "zh": "脊柱融合术",
+    "layer": "L7",
+    "type": "intervention",
+    "subtype": "surgery",
+    "description": "脊柱融合术"
+  },
+  "Laminectomy": {
+    "zh": "椎板切除术",
+    "layer": "L7",
+    "type": "intervention",
+    "subtype": "surgery",
+    "description": "椎板切除术"
+  }
+}

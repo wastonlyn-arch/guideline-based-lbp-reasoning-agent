@@ -1,0 +1,30 @@
+# ── clinical_reasoning_agent 项目配置 (v0.3 MVP) ──
+
+llm:
+  provider: deepseek           # deepseek | ollama
+  model: deepseek-v4-flash     # 或 deepseek-reasoner, llama3, qwen2.5 等
+  api_key_env: DEEPSEEK_API_KEY
+  base_url: https://api.deepseek.com
+  temperature: 0.1
+  max_tokens: 4096
+  reasoning_effort: medium     # low | medium | high
+
+database:
+  path: data/knowledge_base.db
+
+vector_store:
+  path: data/faiss_index
+  embedding_model: all-MiniLM-L6-v2
+
+reasoning:
+  engine: rule_based            # rule_based | hybrid (future)
+  confidence_strategy: weighted_sum  # max | weighted_sum | product
+  rules_path: data/ontology/diagnostic_rules.json  # M-rule 规则文件路径
+
+soap:
+  include_graph_context: true   # SOAP 中是否包含图谱检索上下文
+  include_vector_context: true  # SOAP 中是否包含向量检索上下文
+  max_chunks: 5                 # 最多引用多少个检索片段
+
+logging:
+  level: INFO                   # DEBUG | INFO | WARNING | ERROR
