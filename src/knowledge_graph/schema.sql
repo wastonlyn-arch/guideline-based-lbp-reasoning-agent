@@ -97,21 +97,36 @@ CREATE TABLE IF NOT EXISTS grading_thresholds (
 
 CREATE INDEX IF NOT EXISTS idx_grading_thresholds_indicator ON grading_thresholds(indicator_id);
 
--- 术语映射表（英文节点名 ↔ 中文术语对照）
+-- 术语映射表（英文节点名 ↔ 中文学术/日常用语等全字段记录）
 CREATE TABLE IF NOT EXISTS term_mapping (
     id              INTEGER PRIMARY KEY AUTOINCREMENT,
     node_name       TEXT NOT NULL REFERENCES nodes(name),
-    zh_term         TEXT NOT NULL,                 -- 中文术语
-    layer           TEXT NOT NULL,                 -- L0-L8 层级
+
+    -- 中文术语字段
+    zh_academic     TEXT NOT NULL DEFAULT '',      -- 中文学术术语
+    zh_common       TEXT NOT NULL DEFAULT '',      -- 日常用语/患者主诉用语
+
+    -- 节点分类
+    layer           TEXT NOT NULL DEFAULT '',       -- L0-L8 层级
     node_type       TEXT NOT NULL DEFAULT 'generic',
-    node_subtype    TEXT DEFAULT '',
-    description     TEXT DEFAULT '',
+    node_subtype    TEXT NOT NULL DEFAULT '',
+
+    -- 描述字段
+    description_en  TEXT NOT NULL DEFAULT '',      -- 英文描述原文
+    description_zh  TEXT NOT NULL DEFAULT '',      -- 中文描述（从英文提取）
+
+    -- 元信息
+    curation_level  TEXT NOT NULL DEFAULT 'needs_review',  -- curated / auto_zh / patched / needs_review
+    source          TEXT NOT NULL DEFAULT '',              -- 数据来源标识
+    source_edges    TEXT NOT NULL DEFAULT '[]',            -- JSON: 关联边列表
+    aliases         TEXT NOT NULL DEFAULT '[]',            -- JSON: 同义英文名列表
+
     created_at      TEXT DEFAULT (datetime('now')),
-    UNIQUE(node_name, zh_term)
+    UNIQUE(node_name)
 );
 
 CREATE INDEX IF NOT EXISTS idx_term_mapping_node ON term_mapping(node_name);
-CREATE INDEX IF NOT EXISTS idx_term_mapping_zh ON term_mapping(zh_term);
+CREATE INDEX IF NOT EXISTS idx_term_mapping_zh ON term_mapping(zh_academic);
 
 -- 推理日志表（审计追踪）
 CREATE TABLE IF NOT EXISTS inference_log (

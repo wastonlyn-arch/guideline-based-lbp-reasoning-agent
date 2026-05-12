@@ -211,40 +211,56 @@ class KnowledgeGraphRepository:
     # ════════════════════════════════════════════
 
     def upsert_term_mapping(self, mapping: TermMapping) -> int:
-        """插入或更新术语映射（按 node_name+zh_term 去重），返回 ID。"""
+        """插入或更新术语映射（按 node_name 去重），返回 ID。"""
         existing = self.db.fetchone(
-            "SELECT id FROM term_mapping WHERE node_name=? AND zh_term=?",
-            (mapping.node_name, mapping.zh_term),
+            "SELECT id FROM term_mapping WHERE node_name=?",
+            (mapping.node_name,),
         )
         if existing:
             self.db.execute(
-                """UPDATE term_mapping SET layer=?, node_type=?, node_subtype=?, description=?
+                """UPDATE term_mapping
+                   SET zh_academic=?, zh_common=?, layer=?, node_type=?, node_subtype=?,
+                       description_en=?, description_zh=?, curation_level=?, source=?,
+                       source_edges=?, aliases=?
                    WHERE id=?""",
-                (mapping.layer, mapping.node_type, mapping.node_subtype, mapping.description, existing["id"]),
+                (mapping.zh_academic, mapping.zh_common,
+                 mapping.layer, mapping.node_type, mapping.node_subtype,
+                 mapping.description_en, mapping.description_zh,
+                 mapping.curation_level, mapping.source,
+                 mapping.source_edges, mapping.aliases,
+                 existing["id"]),
             )
             return existing["id"]
         cursor = self.db.execute(
-            """INSERT INTO term_mapping (node_name, zh_term, layer, node_type, node_subtype, description)
-               VALUES (?, ?, ?, ?, ?, ?)""",
-            (mapping.node_name, mapping.zh_term, mapping.layer, mapping.node_type, mapping.node_subtype, mapping.description),
+            """INSERT INTO term_mapping
+               (node_name, zh_academic, zh_common, layer, node_type, node_subtype,
+                description_en, description_zh, curation_level, source, source_edges, aliases)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+            (mapping.node_name, mapping.zh_academic, mapping.zh_common,
+             mapping.layer, mapping.node_type, mapping.node_subtype,
+             mapping.description_en, mapping.description_zh,
+             mapping.curation_level, mapping.source,
+             mapping.source_edges, mapping.aliases),
         )
         return cursor.lastrowid
 
-    def get_term_mapping_by_zh(self, zh_term: str) -> Optional[TermMapping]:
-        """按中文术语查询映射。"""
-        row = self.db.fetchone("SELECT * FROM term_mapping WHERE zh_term=?", (zh_term,))
+    def get_term_mapping_by_node(self, node_name: str) -> Optional[TermMapping]:
+        """按节点名查询映射（唯一）。"""
+        row = self.db.fetchone("SELECT * FROM term_mapping WHERE node_name=?", (node_name,))
         return self._row_to_term_mapping(row) if row else None
 
-    def get_term_mapping_by_node(self, node_name: str) -> list[TermMapping]:
-        """按节点名查询所有中文术语。"""
-        rows = self.db.fetchall("SELECT * FROM term_mapping WHERE node_name=?", (node_name,))
-        return [self._row_to_term_mapping(r) for r in rows]
+    def get_term_mapping_by_zh(self, zh_academic: str) -> Optional[TermMapping]:
+        """按中文学术术语查询映射。"""
+        row = self.db.fetchone("SELECT * FROM term_mapping WHERE zh_academic=?", (zh_academic,))
+        return self._row_to_term_mapping(row) if row else None
 
     def search_term_mapping(self, keyword: str, limit: int = 20) -> list[TermMapping]:
-        """模糊搜索中文术语。"""
+        """模糊搜索术语（英文名、中文学术名、中文日常用语）。"""
         rows = self.db.fetchall(
-            "SELECT * FROM term_mapping WHERE zh_term LIKE ? OR node_name LIKE ? LIMIT ?",
-            (f"%{keyword}%", f"%{keyword}%", limit),
+            """SELECT * FROM term_mapping
+               WHERE node_name LIKE ? OR zh_academic LIKE ? OR zh_common LIKE ?
+               LIMIT ?""",
+            (f"%{keyword}%", f"%{keyword}%", f"%{keyword}%", limit),
         )
         return [self._row_to_term_mapping(r) for r in rows]
 
@@ -302,9 +318,15 @@ class KnowledgeGraphRepository:
         return TermMapping(
             id=row["id"],
             node_name=row["node_name"],
-            zh_term=row["zh_term"],
-            layer=row["layer"],
+            zh_academic=row.get("zh_academic", ""),
+            zh_common=row.get("zh_common", ""),
+            layer=row.get("layer", ""),
             node_type=row.get("node_type", "generic"),
             node_subtype=row.get("node_subtype", ""),
-            description=row.get("description", ""),
+            description_en=row.get("description_en", ""),
+            description_zh=row.get("description_zh", ""),
+            curation_level=row.get("curation_level", "needs_review"),
+            source=row.get("source", ""),
+            source_edges=row.get("source_edges", "[]"),
+            aliases=row.get("aliases", "[]"),
         )

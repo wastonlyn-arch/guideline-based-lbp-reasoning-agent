@@ -1,5 +1,5 @@
 """
-知识图谱数据模型 — 节点/边/别名/诊断规则/分度指标数据类。
+知识图谱数据模型 — 节点/边/别名/诊断规则/分度指标/术语映射数据类。
 
 这些 dataclass 是整个项目的"公用契约"：
   - extraction 模块输出 EntityNode 列表
@@ -111,11 +111,33 @@ class GradingIndicator:
 
 @dataclass
 class TermMapping:
-    """术语映射（英文节点名 ↔ 中文术语）。"""
-    node_name: str                               # 节点英文名（PascalCase）
-    zh_term: str                                 # 中文术语
-    layer: str                                   # L0-L8 层级
+    """术语映射（英文节点名 ↔ 中文学术/日常用语等全字段记录）。
+
+    Attributes:
+        node_name:       节点英文名（PascalCase，唯一标识）
+        zh_academic:     中文学术术语（手动标注或自动提取）
+        zh_common:       日常用语/患者主诉用语（从 common_names.json 填充）
+        layer:           L0-L8 层级
+        node_type:       节点类型（symptom, diagnosis, cause, intervention...）
+        node_subtype:    细分类别（pain, exercise_therapy...）
+        description_en:  英文描述原文
+        description_zh:  从描述中提取的中文部分
+        curation_level:  精加工程度: curated / auto_zh / patched / needs_review
+        source:          数据来源（"full_book.json" / "patch_list" / "common_names"）
+        source_edges:    关联边列表（JSON string），引用追溯
+        aliases:         同义英文名列表（JSON string）
+        id:              数据库自增 ID
+    """
+    node_name: str
+    zh_academic: str = ""
+    zh_common: str = ""
+    layer: str = ""
     node_type: str = "generic"
     node_subtype: str = ""
-    description: str = ""
+    description_en: str = ""
+    description_zh: str = ""
+    curation_level: str = "needs_review"
+    source: str = ""
+    source_edges: str = ""       # JSON string: [{"relation":"causes","target":"...","evidence_text":"..."}]
+    aliases: str = ""            # JSON string: ["alias1","alias2"]
     id: Optional[int] = None
