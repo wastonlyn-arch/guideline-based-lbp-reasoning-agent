@@ -268,6 +268,23 @@
 
 ---
 
+### 远程仓库接入
+
+**日期**：2026-05-13
+
+**做了什么**：
+- 验证 SSH 连通性（`ssh -T git@github.com`）→ 成功
+- 添加远程仓库：`git@github.com:wastonlyn-arch/guideline-based-lbp-reasoning-agent.git`
+- 推送本地 3 个 commit 到 GitHub（92 objects, 123 KiB）
+- 本地 master 已跟踪 origin/master
+
+**产出物**：
+- GitHub 仓库已同步：`https://github.com/wastonlyn-arch/guideline-based-lbp-reasoning-agent`
+
+**下一步**：阶段 10 — 从 kg_system 白名单迁移下腰痛知识图谱节点和边数据
+
+---
+
 ## 待办池
 
 - [ ] 阶段 10: 从 kg_system 白名单迁移下腰痛知识图谱节点和边数据
