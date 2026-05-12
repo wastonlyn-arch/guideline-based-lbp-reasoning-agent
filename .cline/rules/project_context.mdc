@@ -162,6 +162,28 @@ infrastructure  ←  knowledge_graph  ←  retrieval  ←  generation  ←  orch
 | SQLite 数据库 | `data/knowledge_base.db`（自动创建） |
 | FAISS 索引 | `data/faiss_index/`（自动创建） |
 
+## Agent 工作流规范
+
+每次用 Agent（如 Cline）完成任务后，必须按以下顺序执行，不可跳过：
+
+1. **更新开发日志**
+   - 在 `docs/DEVELOPMENT_LOG.md` 追加记录
+   - 内容模板：**做了什么 → 产出物 → 卡住问题 → 决策**
+   - 更新状态看板中对应阶段的状态标记
+
+2. **Git 提交**
+   - `git add` + `git commit`（commit message 格式：`<scope>: <简短描述>`）
+   - 提交前执行检查清单确认无敏感文件
+
+3. **报告完成 + 列出下一步**
+   - 输出本次完成内容摘要（含 commit hash）
+   - 查看 `DEVELOPMENT_LOG.md` 待办池，列出下一优先级任务及简要计划
+   - **等待用户确认后再开始下一项**，禁止自动推进
+
+4. **检查待办池中的"新增"项**
+   - 每次完成阶段任务后，查看待办池是否有伴随产生的"新增"子任务（如单元测试、文档补全等）
+   - 如有，在报告中一并列出，由用户决定是否优先处理
+
 ---
 
 ## Git 工作流
@@ -173,8 +195,7 @@ infrastructure  ←  knowledge_graph  ←  retrieval  ←  generation  ←  orch
    - `*.db` / `*.sqlite`（数据库文件）
    - `__pycache__/` / `*.pyc`（缓存）
    - `.pytest_cache/`（测试缓存）
-2. **日志同步**：每次 commit 后，在 `docs/DEVELOPMENT_LOG.md` 追加或更新对应阶段的记录
-3. **项目标识**：commit message 首行以 scope 开头（如 `docs:`, `feat:`, `fix:`, `refactor:`）
+2. **项目标识**：commit message 首行以 scope 开头（如 `docs:`, `feat:`, `fix:`, `refactor:`）
 
 ### 推荐 commit 粒度
 
@@ -184,12 +205,8 @@ infrastructure  ←  knowledge_graph  ←  retrieval  ←  generation  ←  orch
 
 ### 远程仓库
 
-- 当前只有本地仓库（master）
-- 首次推送到 GitHub 时手动执行：
-  ```bash
-  git remote add origin <repo-url>
-  git push -u origin master
-  ```
+- 远程仓库：`git@github.com:wastonlyn-arch/guideline-based-lbp-reasoning-agent.git`
+- 已推送 4 个 commit 到 `origin/master`
 - 推送前二次确认无敏感文件泄漏
 
 ---
