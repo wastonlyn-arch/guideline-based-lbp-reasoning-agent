@@ -164,6 +164,36 @@ infrastructure  ←  knowledge_graph  ←  retrieval  ←  generation  ←  orch
 
 ---
 
+## Git 工作流
+
+### 每次 commit 前的检查清单
+
+1. **敏感文件检查**：`git status --short` 确认以下文件未被误 add：
+   - `.env`（含真实 API key）
+   - `*.db` / `*.sqlite`（数据库文件）
+   - `__pycache__/` / `*.pyc`（缓存）
+   - `.pytest_cache/`（测试缓存）
+2. **日志同步**：每次 commit 后，在 `docs/DEVELOPMENT_LOG.md` 追加或更新对应阶段的记录
+3. **项目标识**：commit message 首行以 scope 开头（如 `docs:`, `feat:`, `fix:`, `refactor:`）
+
+### 推荐 commit 粒度
+
+- 每个阶段结束时做一次 commit（而非积累多个阶段）
+- commit message 格式：`<scope>: <简短描述>`
+- 示例：`feat: 知识图谱路径检索实现` / `docs: 开发日志补录阶段 0-9`
+
+### 远程仓库
+
+- 当前只有本地仓库（master）
+- 首次推送到 GitHub 时手动执行：
+  ```bash
+  git remote add origin <repo-url>
+  git push -u origin master
+  ```
+- 推送前二次确认无敏感文件泄漏
+
+---
+
 ## 架构流程
 
 ```
