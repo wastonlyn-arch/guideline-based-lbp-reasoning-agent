@@ -1,7 +1,3 @@
----
-description: 项目标识、环境策略、架构规则、编码规范、安全工作流
-globs: 
----
 # Project Context — clinical_reasoning_agent
 
 ---
@@ -12,7 +8,7 @@ globs:
 
 ```powershell
 # 1. 读机器档案 — 了解硬件/OS/GPU 约束
-#    文件：.cline/rules/machine_profile.mdc
+#    文件：.clinerules/machine_profile.md
 
 # 2. 激活环境
 conda activate clinical_reasoning
@@ -123,35 +119,6 @@ infrastructure  ←  knowledge_graph  ←  retrieval  ←  generation  ←  orch
 
 ---
 
-## 编码规范
-
-1. **Docstrings**：所有公开模块、类、函数使用 Google 风格 docstring
-2. **类型注解**：所有函数参数和返回值必须有类型注解；`Optional[T]` 表示可空
-3. **导入顺序**：标准库 → 第三方库 → 本地模块（空行分隔）
-4. **行长度**：≤ 100 字符
-5. **命名约定**：
-   - 类：`PascalCase`
-   - 函数/方法：`snake_case`
-   - 常量：`UPPER_SNAKE_CASE`
-   - 私有方法/属性：前缀 `_`
-6. **禁止** `from module import *`
-7. **错误处理**：使用具体异常类型，不静默吞异常
-8. **文件编码**：UTF-8（不含 BOM）
-
----
-
-## 数据安全规则
-
-1. **不要提交密钥**：API key、密码、token 放 `.env`，永远不进代码或 `config.yaml`
-2. **先 gitignore 再创建敏感文件**：确保文件名已在 `.gitignore` 中
-3. **SQLite 安全**：始终使用参数化查询，禁止字符串拼接 WHERE 子句
-4. **生产数据不进开发环境**：使用合成/样本数据
-5. **文件路径**：用 `pathlib.Path` 或 `os.path.join` 构建路径，不用字符串拼接
-6. **清理临时文件**：临时产物应被 gitignore 或在完成后显式删除
-7. **term_mapping 表**：存储原文/中文术语对，中文术语仅供显示，不是可执行代码
-
----
-
 ## 关键路径
 
 | 用途 | 路径 |
@@ -188,20 +155,46 @@ infrastructure  ←  knowledge_graph  ←  retrieval  ←  generation  ←  orch
 
 ## Git 工作流
 
+### 核心原则：用一条 Git 时间线讲故事
+
+| 资产类型 | 提交时机 | commit 示例 | 理由 |
+| ---|---|---|---|
+| 🏛️ **架构决策** | 决策验证后立即独立提交，一决策一 commit | `docs(arch): 选择 M-rule 作为推理引擎` | 高价值低频，独立高亮，方便追溯 v0.1→v1.0 演化 |
+| 📓 **开发日志** | 当日工作收尾时集中一次提交 | `docs: 补录阶段 7 开发日志` | 内容杂但重要，一天一次安全不污染历史 |
+| 🔬 **实验 Notebook (dev/)** | 跑通且结论有效时，清理输出后提交 | `feat(notebook): 验证图谱路径 CTE 查询` | 有保留价值的快照，跑崩的永远不提交 |
+| 🎯 **演示 Notebook (demo/)** | 代码和界面稳定后才提交，每次更新审慎 | `docs(demo): 更新 ACL 推理演示场景` | 精选链路，确保可完整运行 |
+| ❌ **跑飞的实验** | 永不提交 | — | 只留噪音，污染 Git 历史 |
+
+### Notebook 提交前清理规范
+
+提交 `.ipynb` 前必须执行：
+```powershell
+# 1. 清除所有单元格输出（防止敏感数据/乱图入库）
+python -m jupyter nbconvert --ClearOutputPreprocessor.enabled=True --inplace notebooks/dev/<name>.ipynb
+# 2. 在第一个单元格添加元数据块：
+#    ## 实验元数据
+#    - 日期：YYYY-MM-DD
+#    - 结论：成功 / 失败（原因） / 搁置
+#    - 关联文档：docs/xxx.md
+```
+
 ### 每次 commit 前的检查清单
 
 1. **敏感文件检查**：`git status --short` 确认以下文件未被误 add：
    - `.env`（含真实 API key）
    - `*.db` / `*.sqlite`（数据库文件）
-   - `__pycache__/` / `*.pyc`（缓存）
+   - `__pycache__` / `*.pyc`（缓存）
    - `.pytest_cache/`（测试缓存）
+   - `*.ipynb` 已清除输出
 2. **项目标识**：commit message 首行以 scope 开头（如 `docs:`, `feat:`, `fix:`, `refactor:`）
 
-### 推荐 commit 粒度
+### commit message 格式
 
-- 每个阶段结束时做一次 commit（而非积累多个阶段）
-- commit message 格式：`<scope>: <简短描述>`
-- 示例：`feat: 知识图谱路径检索实现` / `docs: 开发日志补录阶段 0-9`
+```
+<scope>: <简短描述>
+```
+
+示例：`docs(arch): 选择 M-rule 作为推理引擎` / `docs: 补录阶段 7 开发日志` / `feat(notebook): 验证图谱路径 CTE 查询`
 
 ### 远程仓库
 

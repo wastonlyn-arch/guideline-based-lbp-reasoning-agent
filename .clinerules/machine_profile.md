@@ -1,7 +1,3 @@
----
-description: 硬件规格、操作系统、已装工具（机器档案）
-globs: 
----
 # Machine Profile — 软硬件基础档案
 
 > 自动采集于 2026-05-12。帮助 AI Agent 了解工作环境的硬边界。

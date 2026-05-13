@@ -1,5 +1,9 @@
 # Core Workflow Rules
 
+## paths: ["src/**/*.py"]
+
+这些规则在编辑 `src/` 下的 Python 文件时额外生效。
+
 1. **Plan first**: Before writing any code, read the existing files and plan the approach.
 2. **One step at a time**: Complete one module before moving to the next.
 3. **Test each step**: After each module change, run the relevant tests before proceeding.

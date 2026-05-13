@@ -1,10 +1,12 @@
 # Clinical Reasoning Agent — Architecture Specification v0.3
 
-> **来源**：三家 AI 架构师建议 + 项目所有者决策收敛
+> **来源**：四家 AI 架构师建议（ChatGPT ×2 + DeepSeek ×2） + 项目所有者决策收敛
 > **用途**：直接指导编码的最终架构定义
-> **日期**：2026-05-11（迁移至 clinical_reasoning_agent 项目）
-> **版本**：v0.3 MVP（第三次收敛 — 最终决策落地）
+> **日期**：2026-05-14（最终收敛 — 第六轮决策融合）
+> **版本**：v0.3 MVP（第六次收敛 — 最终决策落地）
 > **迁移自**：`kg_system/design_advice/medical/03_architecture.md`
+> **收敛过程**：详见 `docs/conversations/architecture/` 下的 09-18 号文档
+> **命名**：架构模型命名为 **MCRM**（Mechanism-based Clinical Reasoning Model）
 
 ---
 
@@ -12,16 +14,17 @@
 
 1. [最终架构图](#1-最终架构图)
 2. [层结构定义（L0-L8）](#2-层结构定义最终版-l0-l78层)
-3. [数据库 Schema](#3-数据库-schema)
-4. [模块接口定义](#4-模块接口定义)
-5. [AgentState 数据流](#5-agentstate-数据流)
-6. [路径约束规则](#6-路径约束规则)
-7. [诊断逻辑层](#7-诊断逻辑层diagnostic-logic-layer)
-8. [中英文语言策略](#8-中英文语言策略)
-9. [Config 结构](#9-config-结构)
-10. [依赖清单](#10-依赖清单)
-11. [文件清单与职责](#11-文件清单与职责)
-12. [实现优先级](#12-实现优先级)
+3. [收敛过程参考文档](#3-收敛过程参考文档)
+4. [数据库 Schema](#4-数据库-schema)
+5. [模块接口定义](#5-模块接口定义)
+6. [AgentState 数据流](#6-agentstate-数据流)
+7. [路径约束规则](#7-路径约束规则)
+8. [诊断逻辑层](#8-诊断逻辑层diagnostic-logic-layer)
+9. [中英文语言策略](#9-中英文语言策略)
+10. [Config 结构](#10-config-结构)
+11. [依赖清单](#11-依赖清单)
+12. [文件清单与职责](#12-文件清单与职责)
+13. [实现优先级](#13-实现优先级)
 
 ---
 
@@ -69,7 +72,7 @@
 ┌──────────────────────────────────────────────────────────────────┐
 │  诊断逻辑层 (reasoning/diagnostic_matcher.py) ★ 新增               │
 │  ┌──────────────────────────────────────────────────────────┐    │
-│  │  症状+体征 → 模式匹配 → 推断机制（见 §7）                 │    │
+│  │  症状+体征 → 模式匹配 → 推断机制（见 §8）                 │    │
 │  │  输入：症状(L4) + 检查(L5) 节点                           │    │
 │  │  输出：推断的病理机制(L2) 或 损伤路径(L1)                 │    │
 │  │  存储：diagnostic_rules 表                                 │    │
@@ -138,7 +141,7 @@
 | **L3** | Pathophysiology | 病理生理机制（客观） | `Nerve_Root_Compression`, `Inflammation`, `Instability` | 独立层，非症状 |
 | **L4** | Symptoms | 主观症状体验 | `Low_Back_Pain`, `Radicular_Pain`, `Numbness` | 与 L3 分开 |
 | **L5** | Clinical Evidence | 体征/检查（客观） | `SLR_40deg_mild`, `MRI_Disc_Protrusion`, `Flexion_Test_Positive` | type 分 provocation / imaging / functional |
-| **L6** | Diagnostic Logic | 模式识别与推理规则 | `Flexion_Pain+SLR+ → Discogenic_Pain` | ⭐ 新增核心层（§7 详解） |
+| **L6** | Diagnostic Logic | 模式识别与推理规则 | `Flexion_Pain+SLR+ → Discogenic_Pain` | ⭐ 新增核心层（§8 详解） |
 | **L7** | Intervention | 干预（5 子类） | 见下方拆分表 | ⭐ 内部强制拆分 |
 | **L8** | Outcome | 预后结局 | `Pain_Relief`, `Return_To_Work`, `Recurrence` | |
 
@@ -164,7 +167,33 @@
 
 ---
 
-## 3. 数据库 Schema
+## 3. 收敛过程参考文档
+
+本文档经过六轮四家 AI 架构师对比后收敛。以下文档记录了完整的收敛过程：
+
+| 文档编号 | 内容 | 轮次 | 来源 |
+|:--------:|:----|:----:|:----:|
+| 09 | ChatGPT 初始架构评估 | R1 | ChatGPT |
+| 10 | DeepSeek 初始架构评估 | R1 | DeepSeek |
+| 11 | ChatGPT 深化评估 | R2 | ChatGPT |
+| 12 | DeepSeek 深化评估 | R2 | DeepSeek |
+| 13 | R1-R2 对比合并文档 | R1-R2 | 融合 |
+| 14 | R1-R4 综合对比总表 | R1-R4 | 融合 |
+| 15 | MCRM 理论模型重建（R3） | R3 | DeepSeek |
+| 16 | 重构/继承/成本分析（R4） | R4 | 融合 |
+| 17 | MVP 产品收敛（R5-R6） | R5-R6 | 融合 |
+| 18 | **终极融合裁决（本篇）** | **R1-R6** | **融合** |
+
+**关键结论**（来自 6 轮对话）：
+- **命名**：MCRM（Mechanism-based Clinical Reasoning Model）— 采用 DeepSeek 提案
+- **策略**：继承增强（保留现有引擎 + API 封装 + Streamlit 前端）
+- **定位**：物理治疗临床推理教学与决策辅助演示（非 AI 诊断）
+- **部署**：Docker + Hugging Face Spaces 免费层
+- **成本**：¥0-100/月
+
+---
+
+## 4. 数据库 Schema
 
 数据库文件：`data/knowledge_base.db`
 
@@ -240,11 +269,12 @@ CREATE INDEX idx_edges_target ON edges(target_id);
 CREATE INDEX idx_chunks_node ON chunks(node_id);
 ```
 
+
 ---
 
-## 4. 模块接口定义
+## 5. 模块接口定义
 
-### 4.1 `entity_extractor.py`（`src/extraction/entity_extractor.py`）— 规则实体抽取
+### 5.1 `entity_extractor.py`（`src/extraction/entity_extractor.py`）— 规则实体抽取
 
 ```python
 def extract_entities(text: str) -> list[dict]:
@@ -263,7 +293,7 @@ def extract_entities(text: str) -> list[dict]:
     """
 ```
 
-### 4.2 `entity_normalizer`（`src/knowledge_graph/repository.py`）— 实体标准化
+### 5.2 `entity_normalizer`（`src/knowledge_graph/repository.py`）— 实体标准化
 
 实体标准化功能内置于 `repository.py` 中，通过 `aliases` 表查询实现。
 
@@ -288,7 +318,7 @@ def get_grading_indicator(indicator: str, value: float) -> str | None:
     """
 ```
 
-### 4.3 `path_retriever.py`（`src/knowledge_graph/path_retriever.py`）— 图谱路径查询
+### 5.3 `path_retriever.py`（`src/knowledge_graph/path_retriever.py`）— 图谱路径查询
 
 ```python
 def find_paths(
@@ -329,7 +359,7 @@ def check_layer_validity(layers: list[int]) -> bool:
     return True
 ```
 
-### 4.4 `graph_searcher.py`（`src/retrieval/graph_searcher.py`）— 图谱路径检索
+### 5.4 `graph_searcher.py`（`src/retrieval/graph_searcher.py`）— 图谱路径检索
 
 ```python
 def retrieve_paths(
@@ -344,7 +374,7 @@ def retrieve_paths(
     """
 ```
 
-### 4.5 `chunk_searcher.py`（`src/retrieval/chunk_searcher.py`）— 向量文献检索
+### 5.5 `chunk_searcher.py`（`src/retrieval/chunk_searcher.py`）— 向量文献检索
 
 ```python
 def retrieve(
@@ -366,7 +396,7 @@ def retrieve(
     """
 ```
 
-### 4.6 `soap_generator.py`（`src/generation/soap_generator.py`）— SOAP 生成
+### 5.6 `soap_generator.py`（`src/generation/soap_generator.py`）— SOAP 生成
 
 ```python
 def fill_template(state: AgentState) -> str:
@@ -391,7 +421,7 @@ def llm_polish(draft: str, paths: list, chunks: list) -> str:
     """
 ```
 
-### 4.7 `orchestrator.py`（`src/orchestrator.py`）— 主流程
+### 5.7 `orchestrator.py`（`src/orchestrator.py`）— 主流程
 
 ```python
 @dataclass
@@ -454,7 +484,7 @@ def run_pipeline(user_input: str, demo_mode: bool = True) -> AgentState:
 
 ---
 
-## 5. AgentState 数据流
+## 6. AgentState 数据流
 
 ```
         字段                    由谁写入              由谁读取
@@ -475,7 +505,7 @@ def run_pipeline(user_input: str, demo_mode: bool = True) -> AgentState:
 
 ---
 
-## 6. 路径约束规则
+## 7. 路径约束规则
 
 | 约束 | 实现方式 | 等级 |
 |:----:|:--------:|:----:|
@@ -489,18 +519,18 @@ def run_pipeline(user_input: str, demo_mode: bool = True) -> AgentState:
 
 ---
 
-## 7. 诊断逻辑层（Diagnostic Logic Layer）
+## 8. 诊断逻辑层（Diagnostic Logic Layer）
 
 > 设计理由：临床推理的核心不是"A causes B"的事实罗列，而是
 > "症状+体征 → 推断机制 → 验证假设"的模式识别过程。
 > 没有这一层，系统只能回答"这是什么"，不能回答"这是为什么"。
 
-### 7.1 定位
+### 8.1 定位
 
 诊断逻辑层位于 **L4（症状）+ L5（体征/检查）→ L2/L3（病理/机制）** 之间。
 它不存储"知识"，而是存储**推理规则**。
 
-### 7.2 规则表示
+### 8.2 规则表示
 
 ```json
 {
@@ -512,7 +542,7 @@ def run_pipeline(user_input: str, demo_mode: bool = True) -> AgentState:
 }
 ```
 
-### 7.3 诊断规则表
+### 8.3 诊断规则表
 
 ```sql
 CREATE TABLE diagnostic_rules (
@@ -526,7 +556,7 @@ CREATE TABLE diagnostic_rules (
 );
 ```
 
-### 7.4 示例规则
+### 8.4 示例规则
 
 | 症候群 (L4+L5) | 推断 (L2) | 机制链 | Confidence |
 |:--------------|:---------|:-------|:---------:|
@@ -535,7 +565,7 @@ CREATE TABLE diagnostic_rules (
 | `Shear_Pain + Instability_Clutch + Sit_to_stand_Pain` | `Segmental_Instability` | Shear_Load → Ligamentous_Injury → Instability | 0.7 |
 | `Night_Pain + Morning_Stiffness + Non_mechanical` | `Red_Flag` | — | 0.5 |
 
-### 7.5 执行逻辑（MVP 简化版）
+### 8.5 执行逻辑（MVP 简化版）
 
 ```python
 def match_diagnosis(symptoms: list[str], signs: list[str]) -> list[dict]:
@@ -552,7 +582,7 @@ def match_diagnosis(symptoms: list[str], signs: list[str]) -> list[dict]:
 
 ---
 
-## 8. 中英文语言策略
+## 9. 中英文语言策略
 
 ```
 知识图谱内部：英文标准名
@@ -571,7 +601,7 @@ SOAP 输出：aliases 表取 language='zh' 渲染为中文
 
 ---
 
-## 9. Config 结构
+## 10. Config 结构
 
 ```yaml
 # config.yaml — Clinical Reasoning Agent 配置
@@ -633,7 +663,7 @@ medical:
 
 ---
 
-## 10. 依赖清单
+## 11. 依赖清单
 
 ```
 # deploy/requirements.txt — Clinical Reasoning Agent 依赖
@@ -651,7 +681,7 @@ pyyaml>=6.0                 # 配置（已有）
 
 ---
 
-## 11. 文件清单与职责
+## 12. 文件清单与职责
 
 ```
 clinical_reasoning_agent/
@@ -673,7 +703,7 @@ clinical_reasoning_agent/
 │   │   └── config.py                  ← 配置加载（yaml+env）
 │   │
 │   ├── knowledge_graph/               ← 知识图谱层
-│   │   ├── schema.sql                 ← 建表语句（上面 §3）
+│   │   ├── schema.sql                 ← 建表语句（上面 §4）
 │   │   ├── models.py                  ← 节点/边/别名数据类
 │   │   ├── repository.py              ← 图谱 CRUD + 实体标准化（aliases 映射）
 │   │   └── path_retriever.py          ← NetworkX 路径查询（关系过滤+层级校验）
@@ -698,7 +728,7 @@ clinical_reasoning_agent/
 ├── notebooks/                         ← 演示 Notebook
 ├── tests/                             ← 测试目录
 ├── deploy/                            ← 部署文件
-│   └── requirements.txt               ← 依赖（上面 §10）
+│   └── requirements.txt               ← 依赖（上面 §11）
 │
 ├── .env.example                       ← 环境变量示例
 ├── .gitignore                         ← Git 忽略规则
@@ -709,7 +739,7 @@ clinical_reasoning_agent/
 
 ---
 
-## 12. 实现优先级
+## 13. 实现优先级
 
 ### Phase A：骨架（第1步，跑通单条链路）
 

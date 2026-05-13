@@ -9,6 +9,15 @@
     config.vector_db_path   # → str
     config.embedding_model  # → str
     config.log_level        # → str
+    
+    # 多模型交叉验证配置
+    config.multi_model_enabled        # → bool
+    config.multi_model_models         # → dict
+    config.multi_model_convergence    # → dict
+    config.multi_model_timeout        # → int
+    
+    # 简化访问
+    config.multi_model_config()       # → dict，完整配置
 """
 
 import os
@@ -44,6 +53,13 @@ class Config:
     # 其他可选配置
     ollama_base_url: str = "http://localhost:11434"
 
+    # ── 多模型交叉验证配置 ──
+    multi_model_enabled: bool = False
+    multi_model_models: dict = field(default_factory=dict)
+    multi_model_convergence: dict = field(default_factory=dict)
+    multi_model_max_parallel: int = 3
+    multi_model_timeout: int = 30
+
     def __init__(self, config_path: str = "config.yaml"):
         """加载配置。
 
@@ -52,6 +68,16 @@ class Config:
         """
         self._load_from_yaml(config_path)
         self._load_from_env()
+
+    def multi_model_config(self) -> dict:
+        """获取完整的多模型配置字典（兼容 multi_llm.MultiLLM.from_config）。"""
+        return {
+            "enabled": self.multi_model_enabled,
+            "models": self.multi_model_models,
+            "convergence": self.multi_model_convergence,
+            "max_parallel": self.multi_model_max_parallel,
+            "timeout": self.multi_model_timeout,
+        }
 
     def _load_from_yaml(self, path: str):
         """从 YAML 文件加载配置。"""
@@ -82,6 +108,14 @@ class Config:
         # Logging
         log = cfg.get("logging", {})
         self.log_level = log.get("level", self.log_level)
+
+        # ── 多模型交叉验证 ──
+        mm = cfg.get("multi_model", {})
+        self.multi_model_enabled = mm.get("enabled", self.multi_model_enabled)
+        self.multi_model_models = mm.get("models", self.multi_model_models)
+        self.multi_model_convergence = mm.get("convergence", self.multi_model_convergence)
+        self.multi_model_max_parallel = mm.get("max_parallel", self.multi_model_max_parallel)
+        self.multi_model_timeout = mm.get("timeout", self.multi_model_timeout)
 
     def _load_from_env(self):
         """从环境变量覆盖配置（优先于 YAML）。"""
