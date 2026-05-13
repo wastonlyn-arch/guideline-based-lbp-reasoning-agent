@@ -9,9 +9,9 @@ llm:
   max_tokens: 4096
   reasoning_effort: medium     # low | medium | high
 
-# ── 多模型交叉验证配置（开发时使用）─
+# ── 多模型交叉验证配置（Tier 2 架构/核心代码时启用）─
 multi_model:
-  enabled: false               # 默认关闭，仅在需要时启用
+  enabled: false               # 默认关闭，Tier 2 任务时手动启用
 
   models:
     primary:                   # 架构设计 + 主方案提出者
@@ -19,24 +19,29 @@ multi_model:
       model: claude-sonnet-4-6
       api_key_env: GPTS_API_KEY
       base_url: https://api.gptsapi.net/v1
-      temperature: 0.5
+      temperature: 0.3
+      max_tokens: 8192
+      reasoning_effort: high
 
-    critic:                    # 替代方案 / 异见者
+    critic:                    # 代码审查 / 替代方案
       provider: gptsapi
-      model: grok-4-1-fast-non-reasoning
+      model: gpt-4.1-mini
       api_key_env: GPTS_API_KEY
       base_url: https://api.gptsapi.net/v1
-      temperature: 0.7
+      temperature: 0.5
+      max_tokens: 4096
 
   convergence:                 # 收敛仲裁者
     provider: deepseek
     model: deepseek-v4-flash
     api_key_env: DEEPSEEK_API_KEY
-    base_url: https://api.deepseek.com
+    base_url: https://api.deepseek.com/v1
     temperature: 0.1
+    max_tokens: 4096
+    reasoning_effort: medium
 
-  max_parallel: 3
-  timeout: 30
+  max_parallel: 2
+  timeout: 60
 
 database:
   path: data/knowledge_base.db
