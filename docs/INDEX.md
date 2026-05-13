@@ -19,6 +19,7 @@
 | `01_CONVERGENCE.md` | `docs/architecture/` | 三家 AI 架构师对比收敛过程 |
 | `02_DECISIONS.md` | `docs/architecture/` | 架构决策记录（ADR） |
 | `03_SPEC.md` | `docs/architecture/` | **架构规范** — 模块职责、API 签名、配置项、数据流 |
+| `05_ENGINEERING_BLUEPRINT.md` | `docs/architecture/` | **工程蓝图** — 分阶段路线图、测试策略、风险矩阵、部署方案、多模型集成 |
 
 ---
 
@@ -45,5 +46,7 @@
 
 | 目录 | 位置 | 说明 |
 |:----|:----|:----|
-| `architecture/` | `docs/conversations/` | 架构相关 AI 对话记录（01-18） |
-| `prompts/` | `docs/conversations/architecture/` | 工程蓝图提示词等归档 |
+| `architecture/` | `docs/conversations/` | 架构相关 AI 对话记录（01-20） |
+| `architecture/20_model_cross_eval.md` | `docs/conversations/architecture/` | **多模型横评报告** — 5 家模型价格/性能/架构/代码/功能边界对比 |
+| `architecture/prompts/` | `docs/conversations/architecture/` | 工程蓝图提示词等归档 |
+| `engineering_blueprint/` | `docs/conversations/` | 工程蓝图 MultiLLM 批处理提示词（batch1-3） |

@@ -329,4 +329,49 @@
 
 ---
 
-*最后更新：2026-05-13*
+## 2026-05-14 — 大模型横评与模型路由规则
+
+### 新增
+- `docs/architecture/04_CROSS_MODEL_COMPARISON.md` — 五家模型（Claude/OpenAI/Gemini/Grok/DeepSeek）六维横评 + 三种组合方案
+- `.clinerules/model_routing.md` — Tier 1/2/3 任务感知模型路由规则
+
+### 变更
+- `config.yaml` — 多模型配置段更新：primary=claude-sonnet-4-6, critic=gpt-4.1-mini, convergence=deepseek-v4-flash
+
+### 提交
+`d831ea9` feat: 大模型横评与任务感知模型路由规则
+
+*最后更新：2026-05-14*
+
+---
+
+## 2026-05-14 — 工程蓝图 MultiLLM 交叉验证（9 维度收敛）
+
+### 新增
+- `docs/architecture/05_ENGINEERING_BLUEPRINT.md` — 分阶段路线图（P1-P4）、工程优先级（P0-P3）、测试策略、性能基线、风险矩阵、多模型集成、部署方案、文档迭代机制
+- `docs/conversations/architecture/20_model_cross_eval.md` — 多模型横评报告（5 家模型 × 10 维度）
+- `docs/conversations/architecture/prompts/19_engineering_blueprint_prompt.md` — 工程蓝图提示词
+- `docs/conversations/engineering_blueprint/batch1/` — 路线图/优先级/数据架构 raw 文件（3 维度）
+- `docs/conversations/engineering_blueprint/batch2/` — 测试/性能/风险 raw 文件（3 维度）
+- `docs/conversations/engineering_blueprint/batch3/` — 多模型/部署/文档 raw 文件（3 维度）
+
+### 变更
+- `docs/INDEX.md` — 新增工程蓝图入口
+- `config.yaml` — LLMClient 参数优化：
+  - 禁用 SDK 内置重试（`max_retries=0`）
+  - 超时增大至 180s
+  - `reasoning_effort` 参数判断逻辑修复（`hasattr` 替代 `in`）
+- pipeline 角色配置：Batch1 primary=claude-sonnet-4-6, Batch2/3 primary=gemini-2.5-flash（降本 50×）
+
+### 收敛过程
+- 主循环：cross_validate(primary, critic) → 分歧仲裁 → 写入 05_ENGINEERING_BLUEPRINT.md
+- 9 维度共识别 44 项共识、9 项分歧（已仲裁）、35 项风险（已纳入风险矩阵）
+- 横评结论：DeepSeek 性价比最优（1/15 价格），Claude 推理最稳，Gemini 兼具性能与成本
+
+### 提交
+`pending` feat: 工程蓝图 9 维度 MultiLLM 交叉验证收敛
+
+### 下一步
+- Batch2/3 raw 文件执行 cross_validate（已完成人工审查）
+- 创建 Kanban 卡片 + 依赖链配置
+- 启动 P1 核心引擎开发
